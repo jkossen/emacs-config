@@ -83,6 +83,9 @@
   ;; Bind the `magit-status' command to a convenient key.
   (global-set-key (kbd "C-c g") #'magit-status))
 
+;; Git auto-commit mode
+(use-package git-auto-commit-mode)
+
 ;;; Go Support
 (use-package go-mode)
 
@@ -119,11 +122,17 @@
   (load custom-file))
 
 ;; Custom keybindings
+(global-set-key (kbd "C-w") 'backward-kill-word)
 (global-set-key (kbd "C-c C-w") 'backward-kill-word)
 (global-set-key "\C-x\C-k" 'kill-region)
 (global-set-key "\C-c\C-k" 'kill-region)
 (global-set-key "\C-c\C-r" 'reload-dotemacs)
 (global-set-key (kbd "C-c C-d") 'duplicate-line)
+
+(global-set-key "\C-c\ h" (lambda() (interactive)(find-file "~/org/index.org")))
+(global-set-key "\C-c\ j" (lambda() (interactive)(find-file "~/org/journal.org")))
+(global-set-key "\C-c\ w" (lambda() (interactive)(find-file "~/work/org/journal.org")))
+
 
 ;; Setup fonts
 (set-face-attribute 'bold nil :weight 'semi-bold)
