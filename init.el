@@ -19,6 +19,8 @@
   (setq use-package-always-ensure t
         use-package-expand-minimally t))
 
+(setenv "NODE_PATH" "/usr/local/lib/node_modules")
+
 ;; Disable the menu bar
 (menu-bar-mode -1)
 
@@ -51,9 +53,12 @@
 (global-display-line-numbers-mode t)
 
 ;; theme
-(use-package material-theme
+(use-package dracula-theme
   :init
-  (load-theme 'material-light t))
+  (load-theme 'dracula t))
+;; (use-package material-theme
+;;   :init
+;;   (load-theme 'material-light t))
 
 ;;; Completion framework
 (use-package vertico
@@ -62,6 +67,17 @@
   (vertico-mode t))
 
 ;;; LSP Support
+
+(use-package lsp-mode
+  :init
+  ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
+  (setq lsp-keymap-prefix "C-c l")
+  :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
+         (vue-mode . lsp)
+         ;; if you want which-key integration
+         (lsp-mode . lsp-enable-which-key-integration))
+  :commands lsp)
+
 (use-package eglot
   :init
   ;; Enable LSP support by default in programming buffers
@@ -71,11 +87,15 @@
   :init
   (global-company-mode))
 
-;;; Pop-up completion
-(use-package corfu
+;;; Pop-up completion, alternative to company?
+;;(use-package corfu
   ;; Enable autocompletion by default in programming buffers
-  :hook prog-mode
-  )
+;;  :hook prog-mode
+;;  )
+
+
+;; Prettier formatting
+(use-package prettier)
 
 ;;; Git client
 (use-package magit
@@ -114,8 +134,6 @@
 (recentf-mode t)
 (defalias 'yes-or-no-p 'y-or-n-p)
 
-(setq mac-command-modifier 'meta)
-
 ;; Store automatic customisation options elsewhere
 (setq custom-file (locate-user-emacs-file "custom.el"))
 (when (file-exists-p custom-file)
@@ -129,8 +147,8 @@
 (global-set-key "\C-c\C-r" 'reload-dotemacs)
 (global-set-key (kbd "C-c C-d") 'duplicate-line)
 
-(global-set-key "\C-c\ h" (lambda() (interactive)(find-file "~/org/index.org")))
-(global-set-key "\C-c\ j" (lambda() (interactive)(find-file "~/org/journal.org")))
+(global-set-key "\C-c\ h" (lambda() (interactive)(find-file "~/SynologyDrive/Notities/01-Todo.md")))
+(global-set-key "\C-c\ j" (lambda() (interactive)(find-file "~/SynologyDrive/Notities/00-Journal.md")))
 (global-set-key "\C-c\ w" (lambda() (interactive)(find-file "~/work/org/journal.org")))
 
 
@@ -168,10 +186,4 @@
   (interactive)
   (load-file "~/.config/emacs/init.el") )
 
-;; Vue support with lsp
-;; https://emacs.stackexchange.com/questions/60388/narrow-eglots-area-of-effect-in-vue-js-file-using-web-mode
-(define-derived-mode genehack-vue-mode web-mode "ghVue"
-  "A major mode derived from web-mode, for editing .vue files with LSP support.")
-(add-to-list 'auto-mode-alist '("\\.vue\\'" . genehack-vue-mode))
-(add-hook 'genehack-vue-mode-hook #'eglot-ensure)
-(add-to-list 'eglot-server-programs '(genehack-vue-mode "vls"))
+
