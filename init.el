@@ -10,6 +10,7 @@
 (require 'package)
 (add-to-list 'package-archives  '("nongnu" . "https://elpa.nongnu.org/nongnu/"))
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+(package-initialize)
 
 ;; enable use-package
 (unless (package-installed-p 'use-package)
@@ -20,6 +21,7 @@
         use-package-expand-minimally t))
 
 (setenv "NODE_PATH" "/usr/local/lib/node_modules")
+(require 'use-package)
 
 ;; Disable the menu bar
 (menu-bar-mode -1)
@@ -83,6 +85,9 @@
   ;; Enable LSP support by default in programming buffers
   (add-hook 'prog-mode-hook #'eglot-ensure))
 
+;; Projectile project interaction
+(use-package projectile)
+
 (use-package company
   :init
   (global-company-mode))
@@ -105,6 +110,9 @@
 
 ;; Git auto-commit mode
 (use-package git-auto-commit-mode)
+
+;;; Web-mode
+(use-package web-mode)
 
 ;;; Go Support
 (use-package go-mode)
